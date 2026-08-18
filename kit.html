@@ -437,16 +437,62 @@ function openKit(data, name){
   }
 }
 
-/* ---- YouTube videosunu embed olarak aç ---- */
+/* ---- YouTube videosunu sayfa içi iframe modal'da aç ----
+   NOT: /embed/ adresini yeni SEKMEDE üst seviye açmak "Hata 153" verir;
+   embed adresi yalnızca sayfa içindeki bir iframe'de çalışır. */
 function openVideo(url, name){
   try{
-    let videoId = null;
-    const youtubeRegex = /(?:youtube.com\/watch\?v=|youtu.be\/)([^&?\s]+)/;
-    const match = url.match(youtubeRegex);
-    if(match) videoId = match[1];
+    var videoId = null;
+    // youtu.be/ID , youtube.com/watch?v=ID , /embed/ID , /shorts/ID biçimlerini destekler
+    var m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    if(m) videoId = m[1];
     if(!videoId){ window.open(url,"_blank","noopener"); return; }
-    const embedUrl = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-    window.open(embedUrl,"_blank","noopener");
+
+    // Zaten açık bir video modalı varsa kaldır
+    var eski = document.getElementById('aab-video-modal');
+    if(eski) eski.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'aab-video-modal';
+    modal.style.cssText =
+      "position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;" +
+      "justify-content:center;padding:20px;background:rgba(12,10,8,.82);";
+
+    var box = document.createElement('div');
+    box.style.cssText =
+      "position:relative;width:min(960px,96vw);max-height:86vh;aspect-ratio:16/9;" +
+      "background:#000;border-radius:14px;overflow:hidden;" +
+      "box-shadow:0 24px 70px -20px rgba(0,0,0,.7);";
+
+    var iframe = document.createElement('iframe');
+    iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&rel=0&modestbranding=1";
+    iframe.title = name || 'Video';
+    iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0;";
+    iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen');
+    iframe.setAttribute('allowfullscreen','');
+
+    var kapat = document.createElement('button');
+    kapat.type = 'button';
+    kapat.setAttribute('aria-label','Kapat');
+    kapat.innerHTML = '&times;';
+    kapat.style.cssText =
+      "position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border:0;" +
+      "border-radius:999px;background:rgba(255,255,255,.92);color:#1c1b1a;font-size:22px;" +
+      "line-height:38px;text-align:center;cursor:pointer;box-shadow:0 6px 18px -6px rgba(0,0,0,.5);";
+
+    box.appendChild(iframe);
+    box.appendChild(kapat);
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+
+    function kapatModal(){
+      modal.remove();
+      document.removeEventListener('keydown', esc);
+    }
+    function esc(e){ if(e.key === 'Escape') kapatModal(); }
+    kapat.addEventListener('click', kapatModal);
+    modal.addEventListener('click', function(e){ if(e.target === modal) kapatModal(); });
+    document.addEventListener('keydown', esc);
   }catch(e){ window.open(url,"_blank","noopener"); }
 }
 
