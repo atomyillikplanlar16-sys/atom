@@ -25,8 +25,7 @@ permalink: /etkinlik/
     document.documentElement.classList.remove("aab-kilitli");
   }
 
-  // Bu oturumda daha önce doğru şifre girildiyse hiçbir şey yapma
-  try { if (sessionStorage.getItem(ANAHTAR) === "1") return; } catch (e) {}
+  // NOT: Şifre HATIRLANMAZ — her sayfa açılışında ve her yenilemede tekrar sorulur.
 
   // Beklenmeyen bir hata olursa içeriği gizli bırakma (beyaz ekranı önler)
   window.addEventListener("error", goster);
@@ -75,7 +74,6 @@ permalink: /etkinlik/
 
     function dene() {
       if (input.value === SIFRE) {
-        try { sessionStorage.setItem(ANAHTAR, "1"); } catch (e) {}
         katman.remove();
         goster();
       } else {
