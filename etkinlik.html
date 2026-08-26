@@ -336,8 +336,14 @@ textarea{min-height:104px;resize:vertical;}
 }
 :focus-visible{outline:2px solid var(--pop);outline-offset:2px;}
 </style>
+<!-- PDF kütüphanesi: birincil kaynak engellenir/ulaşılamazsa (bazı ağlarda cdnjs
+     erişimi kısıtlı olabiliyor) otomatik olarak yedek kaynaklara geçer. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script>if(typeof pdfMake==="undefined"){document.write('<script src="https:\/\/cdn.jsdelivr.net\/npm\/pdfmake@0.2.7\/build\/pdfmake.min.js"><\/script>');}</script>
+<script>if(typeof pdfMake==="undefined"){document.write('<script src="https:\/\/unpkg.com\/pdfmake@0.2.7\/build\/pdfmake.min.js"><\/script>');}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script>if(typeof pdfMake==="undefined"||!pdfMake.vfs){document.write('<script src="https:\/\/cdn.jsdelivr.net\/npm\/pdfmake@0.2.7\/build\/vfs_fonts.js"><\/script>');}</script>
+<script>if(typeof pdfMake==="undefined"||!pdfMake.vfs){document.write('<script src="https:\/\/unpkg.com\/pdfmake@0.2.7\/build\/vfs_fonts.js"><\/script>');}</script>
 <link rel="stylesheet" href="navbar.css">
 <script src="navbar.js" defer></script>
 </head>
@@ -568,7 +574,7 @@ function gonder(){
   };
 
   if(typeof pdfMake==="undefined"){
-    showToast("PDF aracı yüklenemedi. İnternet bağlantını kontrol et.");
+    showToast("PDF aracı yüklenemedi. Sayfayı yenileyip tekrar deneyin; sorun devam ederse internet bağlantınızı kontrol edin.");
     return;
   }
 
@@ -578,22 +584,46 @@ function gonder(){
   var dosyaAdi="atomplan_"+dosyaTarih()+".pdf";
 
   try{
-    // PDF açılmadan önce müşteriye hatırlatma göster (Tamam'a basınca PDF açılır)
-    alert("Etkinlik planınızı kaydetmeyi unutmayın!");
-
     // PDF belgesini oluştur ve dosya adını "atomplan_<bugünün tarihi>" yap
     // (Chrome PDF görüntüleyicide kaydederken bu ad önerilir)
     var pdfDoc = buildPlanDoc(d);
     pdfDoc.info = pdfDoc.info || {};
     pdfDoc.info.title = "atomplan_" + dosyaTarih();
 
-    // PDF'i müşteriye önizleme olarak aç (indirilebilir/yazdırılabilir)
-    pdfMake.createPdf(pdfDoc).open();
+    var pdfObj = pdfMake.createPdf(pdfDoc);
 
-    // Gmail'i AYNI tıklama içinde aç (setTimeout yok → tarayıcı engellemez)
-    gmailCompose(d);
+    // Mobil tarayıcılarda (özellikle iOS Safari) blob önizleme sekmesi
+    // window.open() ile çoğu zaman hiç açılmıyor / boş kalıyor. Bunun yerine
+    // gerçek bir indirme bağlantısı oluşturup tıklatıyoruz — bu yöntem
+    // mobilde çok daha güvenilir çalışıyor. Masaüstünde eski davranış
+    // (yeni sekmede önizleme) korunuyor.
+    var isMobil = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
 
-    showToast("PDF açıldı ve Gmail hazırlandı. PDF'i indirip Gmail'e EK olarak ekleyip gönderin.");
+    if(isMobil){
+      pdfObj.getBlob(function(blob){
+        var blobUrl = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = dosyaAdi;
+        a.target = "_blank";
+        a.rel = "noopener";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(blobUrl); }, 60000);
+
+        gmailCompose(d);
+        showToast("PDF indiriliyor ve Gmail hazırlandı. PDF'i Gmail'e EK olarak ekleyip gönderin.");
+      });
+    } else {
+      // PDF'i müşteriye önizleme olarak aç (indirilebilir/yazdırılabilir)
+      pdfObj.open();
+
+      // Gmail'i AYNI tıklama içinde aç (setTimeout yok → tarayıcı engellemez)
+      gmailCompose(d);
+
+      showToast("PDF açıldı ve Gmail hazırlandı. PDF'i indirip Gmail'e EK olarak ekleyip gönderin.");
+    }
   }catch(err){
     console.error(err);
     showToast("PDF oluşturulurken bir sorun oldu.");
