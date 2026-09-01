@@ -9,28 +9,13 @@
   // Bar zaten eklendiyse tekrar ekleme
   if (document.querySelector('.aab-nav')) return;
 
-  /* Dosya (file://) olarak mı açıldı, yoksa bir sunucuda mı?
-     Bilgisayarda çift tıklayınca protokol "file:" olur; hosting'de "http/https". */
-  var IS_FILE = location.protocol === 'file:';
-
-  /* Sayfa slug'ını doğru adrese çevirir.
-     - Offline (file://): "hakkimizda.html" gibi göreli, .html'li adres  → çift tıklayınca açılır
-     - Sunucuda        : "/hakkimizda" gibi temiz adres                → GitHub Pages ile uyumlu */
+  /* Sayfa slug'ını adrese çevirir. Her zaman ".html" uzantılı, göreli adres
+     kullanılır: hem bilgisayarda çift tıklayınca (file://) hem de GitHub
+     Pages gibi düz statik hosting'te (uzantısız adresleri otomatik
+     çözmüyor) aynı şekilde çalışır — sunucu ayarına bağlı değildir. */
   function pageHref(slug, hash) {
     hash = hash || '';
-    if (IS_FILE) {
-      return (slug === 'index' ? 'index.html' : slug + '.html') + hash;
-    }
-    return (slug === 'index' ? '/' : '/' + slug) + hash;
-  }
-
-  /* Eski .html adresleriyle gelenleri temiz adrese yönlendir.
-     SADECE sunucuda çalışır. Offline'da .html'i silmek klasör listesine düşürür,
-     o yüzden file:// açılışında bu blok atlanır. */
-  if (!IS_FILE && /\.html$/i.test(location.pathname)) {
-    var cleanPath = location.pathname.replace(/\.html$/i, '').replace(/\/index$/i, '/');
-    location.replace(cleanPath + location.search + location.hash);
-    return;
+    return (slug === 'index' ? 'index.html' : slug + '.html') + hash;
   }
 
   /* index.html ve kit.html'deki eski (elle yazılmış) barı kaldır.
