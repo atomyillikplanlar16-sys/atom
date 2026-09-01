@@ -40,6 +40,7 @@
         '<ul class="aab-links" id="aabLinks">' +
           '<li><a href="' + pageHref('index') + '" data-page="index">Ana Sayfa</a></li>' +
           '<li><a href="' + pageHref('hakkimizda') + '" data-page="hakkimizda">Hakkımızda</a></li>' +
+          '<li><a href="' + pageHref('atolyeler') + '" data-page="atolyeler">Atölyelerimiz</a></li>' +
           '<li class="aab-dd" id="aabDD">' +
             '<button class="aab-dd-btn" type="button" aria-expanded="false" aria-haspopup="true">İçeriklerimiz <span aria-hidden="true">▾</span></button>' +
             '<ul class="aab-dd__menu">' +
@@ -65,7 +66,7 @@
   /* --- Sayfa içindeki elle yazılmış iç bağlantıları da protokole göre düzelt ---
      Örn. index.html'deki href="/hakkimizda" veya hakkimizda.html'deki href="/"
      offline'da kırılırdı; burada doğru adrese çevriliyor. */
-  var SLUGS = ['index', 'hakkimizda', 'etkinlik', 'kit', 'kity', 'videolar'];
+  var SLUGS = ['index', 'hakkimizda', 'atolyeler', 'etkinlik', 'kit', 'kity', 'videolar'];
   Array.prototype.forEach.call(document.querySelectorAll('a[href]'), function (a) {
     var raw = a.getAttribute('href');
     if (!raw) return;
