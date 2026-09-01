@@ -9,13 +9,28 @@
   // Bar zaten eklendiyse tekrar ekleme
   if (document.querySelector('.aab-nav')) return;
 
-  /* Sayfa slug'ını adrese çevirir. Her zaman ".html" uzantılı, göreli adres
-     kullanılır: hem bilgisayarda çift tıklayınca (file://) hem de GitHub
-     Pages gibi düz statik hosting'te (uzantısız adresleri otomatik
-     çözmüyor) aynı şekilde çalışır — sunucu ayarına bağlı değildir. */
+  /* Sayfa slug'ını adrese çevirir.
+     - Bilgisayarda çift tıklayınca (file://): her zaman aynı klasördeki
+       "slug.html" dosyasına gider — sunucu yok, disk üzerindeki gerçek
+       dosya adları kullanılmalı.
+     - Gerçek sitede (GitHub Pages): etkinlik.html, kit.html, kity.html ve
+       videolar.html dosyalarının başında Jekyll "permalink" tanımlı
+       olduğu için bu sayfalar artık "slug.html" adresinde DEĞİL, "/slug/"
+       adresinde yayınlanıyor (slug.html isteği 404 veriyor). Diğer
+       sayfalarda (index, hakkimizda, atolyeler) permalink yok, onlar hâlâ
+       "/slug.html" adresinde. Ayrıca adresler hep "/" ile başlayan mutlak
+       yol olarak üretiliyor — aksi hâlde /etkinlik/ gibi bir sayfadayken
+       diğer linkler yanlış (bir klasör içine göre) hesaplanırdı. */
+  var IS_FILE = location.protocol === 'file:';
+  var PRETTY_SLUGS = ['etkinlik', 'kit', 'kity', 'videolar'];
   function pageHref(slug, hash) {
     hash = hash || '';
-    return (slug === 'index' ? 'index.html' : slug + '.html') + hash;
+    if (IS_FILE) {
+      return (slug === 'index' ? 'index.html' : slug + '.html') + hash;
+    }
+    if (slug === 'index') return '/' + hash;
+    if (PRETTY_SLUGS.indexOf(slug) !== -1) return '/' + slug + '/' + hash;
+    return '/' + slug + '.html' + hash;
   }
 
   /* index.html ve kit.html'deki eski (elle yazılmış) barı kaldır.
