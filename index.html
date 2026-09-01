@@ -1269,7 +1269,7 @@ document.addEventListener('keydown', function(e){
 
 <!-- TANITIM POPUP: Afiş + Video (ana sayfa girişinde açılır) -->
 <style>
-  #tanitimPopup{position:fixed;inset:0;z-index:6000;background:rgba(42,38,32,.68);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+  #tanitimPopup{position:fixed;inset:0;z-index:10000;background:rgba(42,38,32,.68);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s ease}
   #tanitimPopup.acik{opacity:1;pointer-events:auto}
   #tanitimPopup .tp-kutu{position:relative;width:100%;max-width:840px;max-height:92vh;overflow:auto;background:var(--paper);border-radius:28px;box-shadow:0 30px 70px -20px rgba(42,38,32,.55);transform:translateY(18px) scale(.97);transition:transform .35s ease;display:flex;flex-direction:row}
   #tanitimPopup.acik .tp-kutu{transform:translateY(0) scale(1)}
