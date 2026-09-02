@@ -570,7 +570,7 @@ footer{background:var(--ink);color:rgba(252,249,242,.7);padding:50px 0 36px}
   </div>
 </footer>
 
-<script src="jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js"></script>
 <script>
 // Mobile menu
 const menuBtn=document.getElementById('menuBtn');
@@ -850,12 +850,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')document.que
     if(!contact){ showMsg('Lütfen ilgili kişiyi girin.','err'); contactEl.focus(); return; }
     if(!phone){ showMsg('Lütfen telefon numaranızı girin.','err'); phoneEl.focus(); return; }
     if(wsById(wsId).custom && !note){ showMsg('Lütfen kurumunuzun müfredatını/temasını Not alanına yazın.','err'); noteEl.focus(); return; }
-
-    const rem=remainingFor(wsId,date,slot);
-    if(count>rem){
-      showMsg('Seçtiğiniz saatte sadece '+rem+' kişilik yer kaldı. Öğrenci sayısını azaltın ya da farklı bir saat seçin.','err');
-      return;
-    }
 
     const booking={ ref:makeRef(), wsId, date, slot, count, age, name, contact, phone, email, note, createdAt:new Date().toISOString() };
     const list=loadBookings(); list.push(booking); saveBookings(list);
