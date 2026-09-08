@@ -965,10 +965,14 @@ const institutionData = {
   },
   'emine-ornek': {
     name: 'EMİNE ÖRNEK EĞİTİM KURUMLARI',
-    password: 'emineornek2026',
+    password: 'eö2026',
     levels: {
-      anaokulu: { label: 'Anaokulu', icon: '🎨', categories: emptyCategories() },
-      ilkokul:  { label: 'İlkokul',  icon: '📚', categories: emptyCategories() },
+      anaokulu: { label: 'Anaokulu', icon: '🎨', videos: [
+        { title: 'Kalemliğimi Tasarlıyorum', url: 'https://drive.google.com/drive/u/0/folders/1ieHjUvByhThcJw44ccIs0t32_-ft9R2O' },
+      ]},
+      sinif1:   { label: '1. Sınıf', icon: '1️⃣', videos: [] },
+      sinif2:   { label: '2. Sınıf', icon: '2️⃣', videos: [] },
+      sinif3:   { label: '3. Sınıf', icon: '3️⃣', videos: [] },
     }
   },
   'fkm': {
@@ -1143,8 +1147,15 @@ function renderLevelStep() {
     btn.innerHTML = `<span class="level-icon">${lvl.icon}</span><span class="level-label">${lvl.label}</span>`;
     btn.addEventListener('click', () => {
       state.level = key;
-      renderCategoryStep();
-      showStep('category');
+      if (lvl.videos) {
+        // Bu seviyede kategori (Tanıtım/Eğitim/Katalog) adımı yok — direkt video listesi
+        state.category = null;
+        renderVideoStep();
+        showStep('videos');
+      } else {
+        renderCategoryStep();
+        showStep('category');
+      }
     });
     levelGrid.appendChild(btn);
   });
@@ -1176,6 +1187,11 @@ function renderCategoryStep() {
 // Adım 3: Video listesi
 // URL'yi oynatılabilir formata çevir
 function resolveVideoUrl(url) {
+  // Google Drive klasörü: /drive/folders/ID veya /drive/u/0/folders/ID
+  const folderMatch = url.match(/drive\.google\.com\/.*folders\/([^/?#]+)/);
+  if (folderMatch) {
+    return { type: 'drive', src: `https://drive.google.com/embeddedfolderview?id=${folderMatch[1]}#list` };
+  }
   // Google Drive: /file/d/ID/view → /file/d/ID/preview
   const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
   if (driveMatch) {
@@ -1256,7 +1272,9 @@ document.getElementById('playerModal').addEventListener('click', function(e) {
 });
 
 function renderVideoStep() {
-  const cat = institutionData[state.institution].levels[state.level].categories[state.category];
+  const lvl = institutionData[state.institution].levels[state.level];
+  // Kategori adımı olan kurumlarda cat = seçilen kategori; olmayanlarda (state.category null) cat = seviyenin kendisi
+  const cat = state.category ? lvl.categories[state.category] : lvl;
   videoList.innerHTML = '';
   if (cat.videos.length > 0) {
     cat.videos.forEach(video => {
@@ -1265,13 +1283,9 @@ function renderVideoStep() {
       li.innerHTML = `
         <a href="${video.url}" target="_blank" rel="noopener noreferrer">
           <span class="video-item-title">${video.title}</span>
+          <span class="video-item-arrow">→</span>
         </a>
-        <button class="video-item-play" data-url="${video.url}" data-title="${video.title}">▶ Oynat</button>
       `;
-      li.querySelector('.video-item-play').addEventListener('click', (e) => {
-        e.stopPropagation();
-        openPlayer(video.title, video.url);
-      });
       videoList.appendChild(li);
     });
     emptyVideos.style.display = 'none';
