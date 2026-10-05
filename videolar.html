@@ -981,7 +981,13 @@ const institutionData = {
     name: 'FKM OKULLARI',
     password: 'fkm2026',
     levels: {
-      anaokulu: { label: 'Anaokulu', icon: '🎨', categories: emptyCategories() },
+      anaokulu: { label: 'Anaokulu', icon: '🎨', categories: {
+        tanitim: { label: 'Tanıtım Videoları', icon: '🎬', videos: [] },
+        egitim:  { label: 'Eğitim Videoları',  icon: '📖', videos: [
+          { title: 'Ailemi Tanıyorum', url: 'https://drive.google.com/drive/u/1/folders/16QeIqmx7D-kuARa9B5NxkfmdpI_iTZpU' },
+        ]},
+        katalog: { label: 'Katalog',           icon: '📋', videos: [] },
+      }},
       ilkokul:  { label: 'İlkokul',  icon: '📚', categories: emptyCategories() },
     }
   },
@@ -1273,6 +1279,12 @@ document.getElementById('playerModal').addEventListener('click', function(e) {
   if (e.target === this) closePlayer();
 });
 
+// Drive linklerindeki hesap numarasını (/u/0/, /u/1/) kaldır:
+// aksi halde link, sadece o numaralı hesabı olan kişide düzgün açılır.
+function cleanDriveUrl(url) {
+  return url.replace(/(drive\.google\.com\/drive)\/u\/\d+\//, '$1/');
+}
+
 function renderVideoStep() {
   const lvl = institutionData[state.institution].levels[state.level];
   // Kategori adımı olan kurumlarda cat = seçilen kategori; olmayanlarda (state.category null) cat = seviyenin kendisi
@@ -1283,7 +1295,7 @@ function renderVideoStep() {
       const li = document.createElement('li');
       li.className = 'video-item';
       li.innerHTML = `
-        <a href="${video.url}" target="_blank" rel="noopener noreferrer">
+        <a href="${cleanDriveUrl(video.url)}" target="_blank" rel="noopener noreferrer">
           <span class="video-item-title">${video.title}</span>
           <span class="video-item-arrow">→</span>
         </a>
