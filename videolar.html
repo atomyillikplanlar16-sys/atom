@@ -973,7 +973,7 @@ const institutionData = {
       sinif1:   { label: '1. Sınıf', icon: '1️⃣', videos: [] },
       sinif2:   { label: '2. Sınıf', icon: '2️⃣', videos: [
         { title: 'Geometrik Şekiller', url: 'https://drive.google.com/drive/u/1/folders/1cXQql2uI2rxqHtkLICUxBzW4th9NU5XE' },
-        { title: 'Sıvıların Ölçümü', url: 'sivilarin-olcumu.mp4' },
+        { title: 'Sıvıların Ölçümü', url: 'https://drive.google.com/drive/u/1/folders/1sqYKg9E733zbcwfa0DLVh0L441jH2TjS' },
       ]},
       sinif3:   { label: '3. Sınıf', icon: '3️⃣', videos: [] },
     }
@@ -1254,13 +1254,44 @@ function openPlayer(title, url) {
       playerError.style.display = 'flex';
     };
   } else {
-    videoSource.src = resolved.src;
-    directPlayer.load();
+    // Hosting videosu: önce site kökünden, gerekirse mevcut sayfa yolundan dene.
+    // /videolar/ gibi permalink kullanılan sayfalarda yalnızca göreli dosya adı
+    // kullanmak tarayıcıyı /videolar/sivilarin-olcumu.mp4 adresine götürür.
+    const originalSrc = resolved.src;
+    const localName = originalSrc.replace(/^\/+/, '');
+    const candidates = /^https?:\/\//i.test(originalSrc)
+      ? [originalSrc]
+      : Array.from(new Set([
+          '/' + localName,
+          new URL(localName, window.location.href).href
+        ]));
+
+    let candidateIndex = 0;
     directPlayer.style.display = 'block';
-    directPlayer.onerror = () => {
-      directPlayer.style.display = 'none';
-      playerError.style.display  = 'flex';
+    playerErrorLink.textContent = 'Videoyu Yeni Sekmede Aç ↗';
+
+    function tryVideoSource() {
+      if (candidateIndex >= candidates.length) {
+        directPlayer.style.display = 'none';
+        playerError.style.display = 'flex';
+        playerErrorLink.href = candidates[0] || originalSrc;
+        return;
+      }
+
+      const src = candidates[candidateIndex++];
+      directPlayer.pause();
+      directPlayer.removeAttribute('src');
+      videoSource.removeAttribute('src');
+      directPlayer.src = src;
+      playerErrorLink.href = src;
+      directPlayer.load();
+    }
+
+    directPlayer.onerror = tryVideoSource;
+    directPlayer.onloadedmetadata = () => {
+      playerError.style.display = 'none';
     };
+    tryVideoSource();
   }
   playerModal.classList.add('active');
 }
@@ -1272,7 +1303,9 @@ function closePlayer() {
   playerModal.classList.remove('active');
   drivePlayer.src = '';
   directPlayer.pause();
-  document.getElementById('videoSource').src = '';
+  directPlayer.removeAttribute('src');
+  document.getElementById('videoSource').removeAttribute('src');
+  directPlayer.load();
 }
 
 document.getElementById('closePlayer').addEventListener('click', closePlayer);
