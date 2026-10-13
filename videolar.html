@@ -973,6 +973,7 @@ const institutionData = {
       sinif1:   { label: '1. Sınıf', icon: '1️⃣', videos: [] },
       sinif2:   { label: '2. Sınıf', icon: '2️⃣', videos: [
         { title: 'Geometrik Şekiller', url: 'https://drive.google.com/drive/u/1/folders/1cXQql2uI2rxqHtkLICUxBzW4th9NU5XE' },
+        { title: 'Sıvıların Ölçümü', url: 'sivilarin-olcumu.mp4' },
       ]},
       sinif3:   { label: '3. Sınıf', icon: '3️⃣', videos: [] },
     }
@@ -1294,12 +1295,26 @@ function renderVideoStep() {
     cat.videos.forEach(video => {
       const li = document.createElement('li');
       li.className = 'video-item';
+      const cleanUrl = cleanDriveUrl(video.url);
       li.innerHTML = `
-        <a href="${cleanDriveUrl(video.url)}" target="_blank" rel="noopener noreferrer">
+        <a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">
           <span class="video-item-title">${video.title}</span>
           <span class="video-item-arrow">→</span>
         </a>
       `;
+
+      // Hostingdeki doğrudan video dosyalarını sayfa içindeki oynatıcıda aç.
+      // Drive klasörleri ve diğer bağlantılar normal şekilde yeni sekmede açılır.
+      if (/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(cleanUrl)) {
+        const link = li.querySelector('a');
+        link.removeAttribute('target');
+        link.removeAttribute('rel');
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          openPlayer(video.title, cleanUrl);
+        });
+      }
+
       videoList.appendChild(li);
     });
     emptyVideos.style.display = 'none';
