@@ -607,8 +607,10 @@ footer{
 .foot{align-items:flex-start}
 .footer-nav{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
 .footer-nav a{font-size:.92rem}
-.copyright{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.copyright::after{content:"Sanatla öğren, merakla üret.";color:rgba(255,255,255,.38)}
+.copyright{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap}
+.copyright-copy{display:inline-block}
+.copyright-year{white-space:nowrap}
+.copyright-tagline{color:rgba(255,255,255,.38);white-space:nowrap}
 
 /* Broken local media fallback */
 img.media-missing{
@@ -687,7 +689,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
   .chip{justify-content:center}
   .foot{flex-direction:column}
   .footer-nav{gap:14px 18px}
-  .copyright::after{width:100%}
+  .copyright-tagline{width:100%;white-space:normal}
   #kid-stage{display:none!important}
   #tanitimPopup{padding:14px}
   #tanitimPopup .tp-kutu{flex-direction:column!important;max-width:460px;border-radius:22px}
@@ -727,7 +729,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
     </a>
     <nav aria-label="Ana menü">
       <ul class="nav-links" id="navLinks">
-        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="/hakkimizda">Hakkımızda</a></li>
         <li class="nav-dd dropdown" id="icerikDD">
           <button class="nav-dd-trigger dd-trigger" aria-expanded="false" aria-haspopup="true">İçeriklerimiz <span class="caret">▾</span></button>
           <ul class="dropdown-menu" role="menu">
@@ -939,14 +941,14 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
         <span>ATOM ART BOX<small>Doğa · Sanat · Eğitim</small></span>
       </a>
       <nav class="footer-nav" aria-label="Alt menü">
-        <a href="#hakkimizda">Hakkımızda</a>
+        <a href="/hakkimizda">Hakkımızda</a>
         <a href="atolyeler.html">Atölyelerimiz</a>
         <a href="/kity" target="_blank" rel="noopener" class="js-kit">Kitini Yarat</a>
         <a href="#videolar">Eğitim Videoları</a>
         <a href="#iletisim">İletişim</a>
       </nav>
     </div>
-    <div class="copyright">© <span id="yil"></span> Atom Art Box. Tüm hakları saklıdır. &middot; by Merve Salihoğlu</div>
+    <div class="copyright"><span class="copyright-copy"><span class="copyright-year">© <span id="yil">2026</span></span> Atom Art Box. Tüm hakları saklıdır. &middot; by Merve Salihoğlu</span><span class="copyright-tagline">Sanatla öğren, merakla üret.</span></div>
   </div>
 </footer>
 
