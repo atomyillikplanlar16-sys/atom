@@ -729,18 +729,18 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
     </a>
     <nav aria-label="Ana menü">
       <ul class="nav-links" id="navLinks">
-        <li><a href="/hakkimizda">Hakkımızda</a></li>
+        <li><a href="hakkimizda.html">Hakkımızda</a></li>
         <li class="nav-dd dropdown" id="icerikDD">
           <button class="nav-dd-trigger dd-trigger" aria-expanded="false" aria-haspopup="true">İçeriklerimiz <span class="caret">▾</span></button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#" class="dd-item icerik-link" data-target="etkinlik.html">📅 Etkinlik Planı</a></li>
-            <li><a href="#" class="dd-item icerik-link" data-target="kit.html">🎨 Kitlerimiz</a></li>
+            <li><a href="etkinlik.html" class="dd-item">📅 Etkinlik Planı</a></li>
+            <li><a href="kit.html" class="dd-item">🎨 Kitlerimiz</a></li>
           </ul>
         </li>
         <li><a href="atolyeler.html">Atölyelerimiz</a></li>
-        <li><a href="/kity" target="_blank" rel="noopener" class="js-kit">Kitini Yarat</a></li>
+        <li><a href="kity.html" target="_blank" rel="noopener" class="js-kit">Kitini Yarat</a></li>
 
-        <li><a href="#videolar">Eğitim Videoları</a></li>
+        <li><a href="videolar.html">Eğitim Videoları</a></li>
         <li><a href="#iletisim">İletişim</a></li>
       </ul>
     </nav>
@@ -764,7 +764,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
       <h1>Çocukların hayal gücüne <em>sanatla renk</em> katıyoruz.</h1>
       <p>Atom Art Box, çocuklar için özgün sanat içerikleri ve etkinlik kutuları üretir. Farklı sanat dallarını harmanlayarak yaratıcılığı besleyen, eğlenceli ve öğretici bir dünya kurar.</p>
       <div class="hero-cta">
-        <a href="/kity" target="_blank" rel="noopener" class="btn btn-primary js-kit">Kitini Yarat</a>
+        <a href="kity.html" target="_blank" rel="noopener" class="btn btn-primary js-kit">Kitini Yarat</a>
         <a href="https://www.vectalojistik.com" target="_blank" rel="noopener" class="btn btn-secondary">Eğitimde Güvenli Sevkiyat</a>
       </div>
       <div class="hero-note">Okullar · Atölyeler · Etkinlik kutuları</div>
@@ -816,7 +816,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
       <span class="eyebrow">Kitini Yarat</span>
       <h2>Kendi sanat kutunu tasarla</h2>
       <p>Malzemeleri, temayı ve etkinlikleri seç; çocuğuna özel sanat kutusunu birkaç adımda oluştur. Aşağıdaki örneklerden ilham al, sonra uygulamayı açıp kendi kitini yarat.</p>
-      <a href="/kity" target="_blank" rel="noopener" class="btn btn-primary js-kit" style="margin-top:4px">Kitini Yarat'ı Aç →</a>
+      <a href="kity.html" target="_blank" rel="noopener" class="btn btn-primary js-kit" style="margin-top:4px">Kitini Yarat'ı Aç →</a>
     </div>
     <div class="gallery reveal">
       <div class="gcell g-feature"><img loading="lazy" decoding="async" src="boc.jpg" alt="Teslim ve Uygulama"><span class="tag">Uygulama</span></div>
@@ -841,6 +841,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
         <li><b>2</b> <span>Malzemelerin tanıtımı ve hazırlık adımları</span></li>
         <li><b>3</b> <span>Adım adım uygulama ve tamamlama</span></li>
       </ul>
+      <a href="videolar.html" class="btn btn-primary" style="margin-top:24px">Tüm Eğitim Videolarını Gör →</a>
     </div>
     <div class="video-side reveal">
       <p class="video-cap">Sanat yansıtır</p>
@@ -941,10 +942,10 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
         <span>ATOM ART BOX<small>Doğa · Sanat · Eğitim</small></span>
       </a>
       <nav class="footer-nav" aria-label="Alt menü">
-        <a href="/hakkimizda">Hakkımızda</a>
+        <a href="hakkimizda.html">Hakkımızda</a>
         <a href="atolyeler.html">Atölyelerimiz</a>
-        <a href="/kity" target="_blank" rel="noopener" class="js-kit">Kitini Yarat</a>
-        <a href="#videolar">Eğitim Videoları</a>
+        <a href="kity.html" target="_blank" rel="noopener" class="js-kit">Kitini Yarat</a>
+        <a href="videolar.html">Eğitim Videoları</a>
         <a href="#iletisim">İletişim</a>
       </nav>
     </div>
@@ -974,7 +975,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
     });
     navLinks.addEventListener('click',function(e){
       var a=e.target.closest('a');
-      if(a && !a.classList.contains('icerik-link')) closeMenu();
+      if(a) closeMenu();
     });
     window.addEventListener('resize',function(){if(innerWidth>1040)closeMenu();},{passive:true});
   }
@@ -1010,7 +1011,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,text
   document.querySelectorAll('.js-kit').forEach(function(a){
     a.addEventListener('click',function(e){
       e.preventDefault();
-      window.open('/kity','_blank','noopener');
+      window.open('kity.html','_blank','noopener');
     });
   });
 
@@ -1102,77 +1103,6 @@ document.querySelectorAll('.yt').forEach(function(yt){
 
 </script>
 
-<script>
-// İçeriklerimiz dropdown linklerine tıklanınca modal aç
-// (etkinlik.html / kit.html ile AYNI tek şifre: "atomart")
-var AAB_SIFRE = "atomart";
-var AAB_ANAHTAR = "aab_icerik_ok";
-
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll('.icerik-link').forEach(function(link){
-    link.addEventListener('click', function(e){
-      e.preventDefault();
-      var hedef = this.getAttribute('data-target');
-      // Bu oturumda şifre daha önce girildiyse tekrar sorma, doğrudan aç
-      try {
-        if(sessionStorage.getItem(AAB_ANAHTAR) === "1"){ window.location.href = hedef; return; }
-      } catch(e){}
-      document.getElementById('icerikModal')._hedef = hedef;
-      document.getElementById('icerikModal').style.display = 'flex';
-      document.getElementById('icerikHata').style.display = 'none';
-      document.getElementById('icerikSifre').value = '';
-      setTimeout(function(){ document.getElementById('icerikSifre').focus(); }, 100);
-    });
-  });
-});
-
-/*
-  NOT: Bu bir istemci-taraflı (frontend) kontroldür ve GERÇEK güvenlik SAĞLAMAZ.
-  Şifre etkinlik.html ve kit.html ile aynıdır ("atomart"). Değiştirmek için
-  yukarıdaki AAB_SIFRE değerini (ve o iki dosyadaki SIFRE değerini) güncelleyin.
-  Ciddi içerik koruması için sunucu taraflı doğrulama gerekir.
-*/
-function icerikGirisYap(){
-  var sifre = document.getElementById('icerikSifre').value;
-  var hedef = document.getElementById('icerikModal')._hedef;
-
-  if(sifre === AAB_SIFRE){
-    // Ortak oturum anahtarını işaretle: aynı sekmede açılan hedef sayfa tekrar sormaz
-    try { sessionStorage.setItem(AAB_ANAHTAR, "1"); } catch(e){}
-    document.getElementById('icerikModal').style.display = 'none';
-    window.location.href = hedef;   // aynı sekmede aç (tek şifre yeterli olsun)
-  } else {
-    document.getElementById('icerikHata').style.display = 'block';
-    document.getElementById('icerikSifre').value = '';
-    document.getElementById('icerikSifre').focus();
-  }
-}
-
-// Enter tuşuyla giriş yapılabilsin
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && document.getElementById('icerikModal').style.display === 'flex'){
-    icerikGirisYap();
-  }
-});
-</script>
-
-<!-- Şifre Modalı -->
-<div id="icerikModal" role="dialog" aria-modal="true" aria-labelledby="icerikBaslik" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(42,38,32,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:24px;padding:40px 36px;max-width:380px;width:90%;box-shadow:0 24px 60px -16px rgba(42,38,32,.4);position:relative">
-    <button type="button" aria-label="Pencereyi kapat" onclick="document.getElementById('icerikModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:0;font-size:1.4rem;cursor:pointer;color:#aaa">✕</button>
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:2.2rem;margin-bottom:8px">🔒</div>
-      <h2 id="icerikBaslik" style="font-family:'Poppins',sans-serif;font-size:1.5rem;margin:0 0 6px;color:#2A2620">İçerik Girişi</h2>
-      <p style="color:#6A6256;font-size:.9rem;margin:0">Devam etmek için şifreyi girin</p>
-    </div>
-    <div id="icerikHata" style="display:none;background:#fff0f0;color:#c0392b;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:.88rem;text-align:center">Şifre yanlış, tekrar deneyin.</div>
-    <label style="display:block;margin-bottom:22px">
-      <span style="font-size:.85rem;font-weight:700;color:#2A2620;display:block;margin-bottom:6px">Şifre</span>
-      <input id="icerikSifre" type="password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:12px 14px;border:2px solid #F2E2D2;border-radius:12px;font-size:.95rem;outline:none;font-family:inherit">
-    </label>
-    <button onclick="icerikGirisYap()" style="width:100%;padding:14px;background:#E85D1B;color:#fff;border:0;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif">Giriş Yap</button>
-  </div>
-</div>
 
 <!-- ATOM ASISTAN -->
 <!--
