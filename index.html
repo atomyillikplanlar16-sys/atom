@@ -1999,5 +1999,17 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+<script>
+/* Gizli yönetici girişi: alt bilgideki "Sanatla öğren, merakla üret." yazısına 3 sn içinde 3 kez tıklayın */
+(function(){
+  var y=document.querySelector('.copyright-tagline');if(!y)return;
+  y.style.userSelect='none';y.style.webkitUserSelect='none';
+  var n=0,t;
+  y.addEventListener('click',function(){
+    n++;clearTimeout(t);t=setTimeout(function(){n=0},3000);
+    if(n>=3){n=0;location.href='yonetim.html'}
+  });
+})();
+</script>
 </body>
 </html>
